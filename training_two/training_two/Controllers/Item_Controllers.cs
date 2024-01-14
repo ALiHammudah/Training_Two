@@ -53,6 +53,11 @@ namespace training_two.Controllers
 
             context.Database.EnsureCreated();
 
+            Item t = context.items.SingleOrDefault(i => i.Name == name);
+
+            if (t != null)
+                return null;
+
             context.items.Add(
                 new Item
                 {
@@ -69,13 +74,33 @@ namespace training_two.Controllers
 
         //DELETE AN ITEM BY ITEM ID
         [HttpDelete("Delete an Item by Id")]
-        public Item deletItem(int id)
+        public Item deletItemID(int id)
         {
             var context = new MyAppDbContext();
 
             context.Database.EnsureCreated();
 
             Item t = context.items.SingleOrDefault(i => i.Id == id);
+
+            if (t == null)
+                return null;
+
+            context.items.Remove(t);
+
+            context.SaveChanges();
+
+            return t;
+        }
+
+        //DELETE AN ITEM BY ITEM NAME
+        [HttpDelete("Delete an Item by name")]
+        public Item deletItemName(string name)
+        {
+            var context = new MyAppDbContext();
+
+            context.Database.EnsureCreated();
+
+            Item t = context.items.SingleOrDefault(i => i.Name == name);
 
             if (t == null)
                 return null;
